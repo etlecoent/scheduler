@@ -5,73 +5,34 @@ import "components/Application.scss";
 import DayList from "components/DayList.js";
 import Appointment from "components/Appointment";
 
-const appointments = [
-  {
-    id: 1,
-    time: "12pm",
-  },
-  {
-    id: 2,
-    time: "1pm",
-    interview: {
-      student: "Lydia Miller-Jones",
-      interviewer: {
-        id: 1,
-        name: "Sylvia Palmer",
-        avatar: "https://i.imgur.com/LpaY82x.png",
-      }
-    }
-  },
-  {
-    id: 3,
-    time: "2pm",
-    interview: {
-      student: "Etienne LC",
-      interviewer: {
-        id: 2,
-        name: "Tori Malcolm",
-        avatar: "https://i.imgur.com/Nmx0Qxo.png",
-      }
-    }
-  },
-  {
-    id: 4,
-    time: "3pm",
-    interview: {
-      student: "Rea Act",
-      interviewer: {
-        id: 2,
-        name: "Mildred Nazir",
-        avatar: "https://i.imgur.com/T2WwVfS.png",
-      }
-    }
-  },
-  {
-    id: 5,
-    time: "4pm",
-  }
-];
-
+import { getAppointmentsForDay } from "helpers/selectors";
 
 export default function Application(props) {
   
   const [state, setState] = useState({
     day:"Monday",
     days:[],
-    appointment: {}
+    appointments: {}
   });
+
+  const dailyAppointments = getAppointmentsForDay(state, state.day);
 
   const setDay = day => setState(prev => ({...prev, day}));
   
-  const setDays = days => setState(prev => ({...state, days}));
-    
-  
   useEffect(() => {
     const urlDays="http://localhost:8001/api/days";
+    const urlAppointments="http://localhost:8001/api/appointments";
+    Promise.all([
+      axios.get(urlDays),
+      axios.get(urlAppointments)
+    ]).then((all) => {
+      const [daysData, appointmentsData] = all;
+      const days = daysData.data;
+      const appointments = appointmentsData.data;
 
-    axios.get(urlDays).then(response => {
-      setDays(response.data)})
-  }, [])
+      setState(prev => ({...prev, days, appointments}));
+    })
+  }, []);
   
   return (
     <main className="layout">
@@ -88,7 +49,7 @@ export default function Application(props) {
         <img className="sidebar__lhl sidebar--centered" src="images/lhl.png" alt="Lighthouse Labs"/>
       </section>
       <section className="schedule">
-        {appointments.map(appointment => {
+        {dailyAppointments.map(appointment => {
           return (
             <Appointment 
               key={appointment.id}
