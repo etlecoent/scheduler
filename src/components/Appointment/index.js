@@ -10,7 +10,7 @@ import Form from './Form';
 
 export default function Appointment(props) {
   
-  const {time, interview} = props;
+  const {time, interview, interviewers} = props;
   
   const EMPTY = "EMPTY";
   const SHOW = "SHOW";
@@ -35,8 +35,7 @@ export default function Appointment(props) {
           interview={interview}
           onCancel={() => back()}
           onSave={() => console.log("Clicked onSave")}
-          // Hardcoded list of interviewers
-          interviewers={[]}
+          interviewers={interviewers}
         />
       )}
     </article>
