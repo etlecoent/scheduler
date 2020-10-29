@@ -30,3 +30,24 @@ export function getInterview(state, interview) {
   result.interviewer = state.interviewers[interview.interviewer]
   return result;
 }
+
+//... returns an array of interviewers for that day
+export function getInterviewersForDay(state, day) {
+  const correctInterviewers = [];
+  
+  const correctDay = state.days.filter(d => {
+    return d.name === day
+  })[0];
+  
+  if (!correctDay || !correctDay.appointments) {
+    return [];
+  }
+
+  for (let interviewer in state.interviewers) {
+    if (correctDay.interviewers.includes(state.interviewers[interviewer].id)){
+      correctInterviewers.push(state.interviewers[interviewer]);
+    }
+  }
+
+  return correctInterviewers;
+}
