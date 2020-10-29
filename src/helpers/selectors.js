@@ -2,22 +2,17 @@
 
   //... returns an array of appointments for that day
 export function getAppointmentsForDay(state, day) {
-  const correctAppointments = [];
   
-  const correctDay = state.days.filter(d => {
+  const correctDay = state.days.find(d => {
     return d.name === day
-  })[0];
+  });
   
   if (!correctDay || !correctDay.appointments) {
     return [];
   }
 
-  for (let appointment in state.appointments) {
-    if (correctDay.appointments.includes(state.appointments[appointment].id)){
-      correctAppointments.push(state.appointments[appointment]);
-    }
-  }
-
+  const correctAppointments = correctDay.appointments.map(appoitmentId => state.appointments[appoitmentId])
+  
   return correctAppointments;
 }
 
@@ -33,21 +28,16 @@ export function getInterview(state, interview) {
 
 //... returns an array of interviewers for that day
 export function getInterviewersForDay(state, day) {
-  const correctInterviewers = [];
   
-  const correctDay = state.days.filter(d => {
+  const correctDay = state.days.find(d => {
     return d.name === day
-  })[0];
+  });
   
   if (!correctDay || !correctDay.appointments) {
     return [];
   }
 
-  for (let interviewer in state.interviewers) {
-    if (correctDay.interviewers.includes(state.interviewers[interviewer].id)){
-      correctInterviewers.push(state.interviewers[interviewer]);
-    }
-  }
+  const correctInterviewers = correctDay.interviewers.map(interviewer => state.interviewers[interviewer])
 
   return correctInterviewers;
 }
