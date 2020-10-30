@@ -7,7 +7,12 @@ export default function InterviewerList(props) {
 
   const {interviewers, value, onChange} = props;
 
+  console.log(value);
+  
   const interviewerList = interviewers.map(interviewer => {
+    
+    console.log(interviewer)
+    
     return (
       
       <InterviewerListItem

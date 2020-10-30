@@ -39,6 +39,9 @@ export default function Application(props) {
   }, []);
 
   function bookInterview(id, interview) {
+    
+    console.log(interview)
+
     const appointment = {
       ...state.appointments[id],
       interview: { ...interview }
@@ -59,6 +62,28 @@ export default function Application(props) {
       })
     });
     return savedToDB;
+  }
+
+  function cancelInterview(id) {
+    const appointment = {
+      ...state.appointments[id],
+      interview: null 
+    };
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment
+    };
+
+    const deletedToDB = new Promise((resolve, reject) => {
+      axios({
+        method: "DELETE",
+        url: `http://localhost:8001/api/appointments/${id}`,
+      }).then((response) => {
+        setState({...state, appointments});
+        resolve(response);
+      })
+    });
+    return deletedToDB;
   }
 
   return (
@@ -85,6 +110,7 @@ export default function Application(props) {
               interview={interview}
               interviewers={dailyInterviewers}
               bookInterview={bookInterview}
+              cancelInterview={cancelInterview}
             />
           )
         })}
