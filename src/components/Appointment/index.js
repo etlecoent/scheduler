@@ -4,6 +4,7 @@ import useVisualMode from "../../hooks/useVisualMode"
 import Header from "../Appointment/Header";
 import Show from "../Appointment/Show";
 import Empty from "../Appointment/Empty";
+import Error from "../Appointment/Error";
 
 import './styles.scss';
 import Form from './Form';
@@ -21,15 +22,16 @@ export default function Appointment(props) {
   const CONFIRM = "CONFIRM";
   const SAVING = "SAVING";
   const DELETING = "DELETING";
+  const ERROR_SAVE = "ERROR_SAVE";
+  const ERROR_DELETE = "ERROR_DELETE";
+
 
   const { mode, transition, back } = useVisualMode(
     interview ? SHOW : EMPTY
   ); 
 
   function save(name, interviewer) {
-    
-    console.log(interviewer);
-    
+        
     const interview = {
       student: name,
       interviewer
@@ -39,16 +41,20 @@ export default function Appointment(props) {
 
     bookInterview(id, interview).then((response) => {
       transition(SHOW);
+    }).catch((err) => {
+      transition(ERROR_SAVE, true);
     })
     
   }
 
   function onDelete() {
     
-    transition(DELETING);
+    transition(DELETING, true);
 
     cancelInterview(id).then((response) => {
       transition(EMPTY);
+    }).catch((err) => {
+      transition(ERROR_DELETE, true);
     })
   }
 
@@ -97,6 +103,18 @@ export default function Appointment(props) {
       {mode === DELETING && (
         <Status 
           message={"Deleting"}
+        />
+      )}
+      {mode === ERROR_SAVE && (
+        <Error 
+          message={"An error occured when saving"}
+          onClose={() => back()}
+        />
+      )}
+      {mode === ERROR_DELETE && (
+        <Error 
+          message={"An error occured when saving deleting"}
+          onClose={() => back()}
         />
       )}
     </article>
