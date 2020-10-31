@@ -10,8 +10,23 @@ export default function useApplicationData() {
     interviewers: {}
   });
 
+  
   const setDay = day => setState(prev => ({...prev, day}));
   
+
+  const recreateDays = (days, appointments) => {
+    
+    return days.map(day => {
+      // Calculate nb of spots remaining for a day
+      const spotsPerDay  = day.appointments.filter(appointmentId => {
+          return appointments[appointmentId].interview === null 
+      }).length
+      // Return the the updated day
+      return {...day, spots:spotsPerDay}      
+    })
+  }
+
+
   useEffect(() => {
     const urlDays="http://localhost:8001/api/days";
     const urlAppointments="http://localhost:8001/api/appointments";
@@ -39,6 +54,8 @@ export default function useApplicationData() {
       ...state.appointments,
       [id]: appointment
     };
+
+    const days = recreateDays(state.days, appointments);
     
     const savedToDB = new Promise((resolve, reject) => {
       axios({
@@ -46,7 +63,7 @@ export default function useApplicationData() {
         url: `http://localhost:8001/api/appointments/${id}`,
         data: {interview}
       }).then((response) => {
-        setState({...state, appointments});
+        setState({...state, appointments, days});
         resolve(response);
       }).catch((error) => {
         reject(error);
@@ -65,12 +82,14 @@ export default function useApplicationData() {
       [id]: appointment
     };
 
+    const days = recreateDays(state.days, appointments);
+
     const deletedToDB = new Promise((resolve, reject) => {
       axios({
         method: "DELETE",
-        url: `http://localhost:8001/api/appointments/${id}`,
+        url: `http://localhost:8001/api/appointments/${id}`
       }).then((response) => {
-        setState({...state, appointments});
+        setState({...state, appointments, days});
         resolve(response);
       }).catch((error) => {
         reject(error);
