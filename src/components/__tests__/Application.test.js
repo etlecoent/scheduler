@@ -3,6 +3,7 @@ import React from "react";
 import { render, cleanup, waitForElement, fireEvent, prettyDOM, getElementError, getByText, getAllByTestId, getByAltText, getByPlaceholderText, queryByText } from "@testing-library/react";
 
 import Application from "components/Application";
+import axios from "axios";
 
 afterEach(cleanup);
 
@@ -104,12 +105,58 @@ describe("Application", () => {
     expect(getByText(correctDay, "1 spot remaining")).toBeInTheDocument();
   });
 
-  // it("shows the save error when failing to save an appointment", async () => {
+  it("shows the save error when failing to save an appointment", async () => {
+    const {container, debug} = render(<Application />);
+    
+    await waitForElement(() => getByText(container, "Archie Cohen"));
+    
+    const appointment = getAllByTestId(container, "appointment")[0];
 
-  // });
+    fireEvent.click(getByAltText(appointment, "Add"));
+    
+    fireEvent.change(getByPlaceholderText(appointment, /enter student name/i), {
+      target: { value: "Lydia Miller-Jones" }
+    });
 
-  // it("shows the delete error when failing to delete an existing appointment", async () => {
+    fireEvent.click(getByAltText(appointment, "Sylvia Palmer"));
+    
+    axios.put.mockRejectedValueOnce();
 
-  // });
+    fireEvent.click(getByText(appointment, "Save"));
 
+    expect(getByText(appointment, "Saving")).toBeInTheDocument();
+    
+    await waitForElement(() => getByText(appointment, "An error occured when saving"));
+
+    fireEvent.click(getByAltText(appointment, "Close"));
+
+    expect(getByPlaceholderText(appointment, /enter student name/i)).toBeInTheDocument();
+
+  });
+
+  it("shows the delete error when failing to delete an existing appointment", async () => {
+    const { container, debug } = render(<Application />);
+
+    await waitForElement(() => getByText(container, "Archie Cohen"));
+
+    const appointment = getAllByTestId(container, "appointment").find(
+      appointment => queryByText(appointment, "Archie Cohen")
+    );
+
+    fireEvent.click(getByAltText(appointment, "Delete"));
+    
+    expect(getByText(appointment, /are you sure wou would like to delete?/i)).toBeInTheDocument();
+    
+    axios.delete.mockRejectedValueOnce();
+
+    fireEvent.click(getByText(appointment, "Confirm")); 
+
+    expect(getByText(appointment, "Deleting")).toBeInTheDocument();
+    
+    await waitForElement(() => getByText(appointment, "An error occured when deleting"));
+
+    fireEvent.click(getByAltText(appointment, "Close"));
+
+    expect(getByText(container, "Archie Cohen")).toBeInTheDocument();
+  });
 })
