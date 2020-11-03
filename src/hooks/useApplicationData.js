@@ -58,8 +58,7 @@ export default function useApplicationData() {
     const days = recreateDays(state.days, appointments);
     
     const savedToDB = new Promise((resolve, reject) => {
-      axios({
-        method: "PUT",
+      axios.put({
         url: `http://localhost:8001/api/appointments/${id}`,
         data: {interview}
       }).then((response) => {
