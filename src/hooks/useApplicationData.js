@@ -84,8 +84,7 @@ export default function useApplicationData() {
     const days = recreateDays(state.days, appointments);
 
     const deletedToDB = new Promise((resolve, reject) => {
-      axios({
-        method: "DELETE",
+      axios.delete({
         url: `http://localhost:8001/api/appointments/${id}`
       }).then((response) => {
         setState({...state, appointments, days});
