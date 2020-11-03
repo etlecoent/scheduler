@@ -113,7 +113,7 @@ export default function Appointment(props) {
       )}
       {mode === ERROR_DELETE && (
         <Error 
-          message={"An error occured when saving deleting"}
+          message={"An error occured when deleting"}
           onClose={() => back()}
         />
       )}
