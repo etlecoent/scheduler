@@ -8,22 +8,20 @@ export function getAppointmentsForDay(state, day) {
   });
   
   if (!correctDay || !correctDay.appointments) {
-    return [];
+    return []
   }
 
-  const correctAppointments = correctDay.appointments.map(appoitmentId => state.appointments[appoitmentId])
-  
-  return correctAppointments;
-}
+  return correctDay.appointments.map(appoitmentId => state.appointments[appoitmentId])  
+};
 
 //... returns an object that contains the interview data if it is passed an object that contains an interviewer
 export function getInterview(state, interview) {
   if (!interview || !interview.interviewer) {
-    return null;
+    return null
   }
   const result = {...interview};
-  result.interviewer = state.interviewers[interview.interviewer]
-  return result;
+  result.interviewer = state.interviewers[interview.interviewer];
+  return result
 }
 
 //... returns an array of interviewers for that day
@@ -37,7 +35,7 @@ export function getInterviewersForDay(state, day) {
     return [];
   }
 
-  const correctInterviewers = correctDay.interviewers.map(interviewer => state.interviewers[interviewer])
+  const correctInterviewers = correctDay.interviewers.map(interviewer => state.interviewers[interviewer]);
 
-  return correctInterviewers;
+  return correctInterviewers
 }

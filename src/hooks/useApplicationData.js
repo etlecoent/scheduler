@@ -44,8 +44,8 @@ export default function useApplicationData() {
     })
   }, []);
 
+
   function bookInterview(id, interview) {
-    console.log(id);
     const appointment = {
       ...state.appointments[id],
       interview: { ...interview }
@@ -71,6 +71,7 @@ export default function useApplicationData() {
     return savedToDB;
   }
 
+  
   function cancelInterview(id) {
     const appointment = {
       ...state.appointments[id],
