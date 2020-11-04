@@ -5,10 +5,11 @@ describe("Appointments", () => {
   beforeEach(() => {
     cy.request('get', 'http://localhost:8001/api/debug/reset');
 
-    cy.visit("/")
+    cy.visit("/");
     
     cy.contains("[data-testid=day]", "Monday");
   });
+
 
   it("should book an interview", () => {
 
@@ -58,13 +59,9 @@ describe("Appointments", () => {
     cy.contains(".button--danger", "Confirm")
       .click();
 
-    // Deleting indicator exists
     cy.contains("Deleting").should("exist");
     cy.contains("Deleting").should("not.exist");
     
-
-
-    // Deleting indicator should not exist
     cy.contains(".appointment__card--show", "Archie Cohen")
       .should("not.exist");
   });
