@@ -45,7 +45,7 @@ export default function useApplicationData() {
   }, []);
 
   function bookInterview(id, interview) {
-    
+    console.log(id);
     const appointment = {
       ...state.appointments[id],
       interview: { ...interview }
@@ -58,10 +58,10 @@ export default function useApplicationData() {
     const days = recreateDays(state.days, appointments);
     
     const savedToDB = new Promise((resolve, reject) => {
-      axios.put({
-        url: `http://localhost:8001/api/appointments/${id}`,
-        data: {interview}
-      }).then((response) => {
+      axios.put(
+        `http://localhost:8001/api/appointments/${id}`,
+        {interview}
+      ).then((response) => {
         setState({...state, appointments, days});
         resolve(response);
       }).catch((error) => {
@@ -84,9 +84,9 @@ export default function useApplicationData() {
     const days = recreateDays(state.days, appointments);
 
     const deletedToDB = new Promise((resolve, reject) => {
-      axios.delete({
-        url: `http://localhost:8001/api/appointments/${id}`
-      }).then((response) => {
+      axios.delete(
+        `http://localhost:8001/api/appointments/${id}`
+      ).then((response) => {
         setState({...state, appointments, days});
         resolve(response);
       }).catch((error) => {
