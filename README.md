@@ -7,9 +7,13 @@ This project made me practice my React, HTML, JS and AJAX (Axios) front-end skil
 ## Notes:
 - Known issue  : when the user books an interview without selecting a mentor. Adding a verification should be the next step.
 
+### Create an appointment:
 !["Create an appointment"](docs/screenshots/create_appointment.png)
+### Edit an appointment:
 !["Edit an appointment"](docs/screenshots/edit_appointment.png)
+### Status message:
 !["Status message"](docs/screenshots/status_message.png)
+### Error handling:
 !["Error handling"](docs/screenshots/error_handling.png)
 
 ## Setup
